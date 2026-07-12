@@ -1,0 +1,600 @@
+/* ==========================================================================
+   SECUREOPS // 10-Point Performance Optimized 3D Cinematic Engine (`assets/css/story.css`)
+   ========================================================================== */
+
+/* Virtual Scroll Track (14,000px depth) */
+#story-scroll-track {
+    width: 100%;
+    height: 14000px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Fixed Full-Screen 3D Perspective Stage */
+#cinematic-world-stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    perspective: 1500px;
+    transform-style: preserve-3d;
+    background: #000000;
+    z-index: var(--z-story);
+    pointer-events: auto;
+    user-select: none;
+}
+
+/* Ambient Volumetric Fog & Lighting (GPU Composited) */
+#volumetric-fog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 2;
+    background: radial-gradient(circle at 50% 50%, var(--fog-color, rgba(0, 240, 255, 0.05)) 0%, transparent 75%);
+    transition: background 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 3D Camera Rig (Driven by Scroll Progress & requestAnimationFrame) */
+#camera-rig {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+    transform: translateZ(calc(var(--cam-z, 0) * 1px)) rotateX(calc(var(--cam-rx, 0) * 1deg)) rotateY(calc(var(--cam-ry, 0) * 1deg)) rotateZ(calc(var(--cam-rz, 0) * 1deg));
+    transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+/* Top-Left Adaptive Quality Mode HUD */
+#quality-mode-hud {
+    position: fixed;
+    left: 28px;
+    top: 28px;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(8, 10, 16, 0.88);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#quality-mode-hud:hover {
+    border-color: var(--primary-cyan);
+    box-shadow: var(--shadow-glow-cyan);
+}
+
+.quality-indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+.quality-indicator-dot.balanced { background: var(--warning-amber); box-shadow: 0 0 10px var(--warning-amber); }
+.quality-indicator-dot.lite { background: var(--alert-red); box-shadow: 0 0 10px var(--alert-red); }
+
+/* Hidden Developer Performance Overlay (Toggle via Ctrl + Shift + D) */
+#dev-perf-overlay {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    z-index: 2000;
+    width: 380px;
+    background: rgba(6, 8, 12, 0.95);
+    border: 1px solid var(--primary-cyan);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #E2E8F0;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), var(--shadow-glow-cyan);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    contain: layout style paint;
+}
+
+#dev-perf-overlay.dev-perf-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.dev-perf-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dev-perf-row:last-child { border-bottom: none; }
+.dev-perf-label { color: var(--text-secondary); }
+.dev-perf-val { font-weight: 700; color: var(--primary-cyan); }
+
+/* Right-Side Cinematic HUD Depth Tracker */
+.hud-tracker {
+    position: fixed;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 1000;
+    background: rgba(8, 10, 16, 0.85);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    padding: 16px 12px;
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    contain: layout style paint;
+}
+
+.hud-step {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    position: relative;
+}
+
+.hud-step:hover, .hud-step.active {
+    background: var(--primary-cyan);
+    border-color: #FFF;
+    transform: scale(1.35);
+}
+
+.hud-step-tooltip {
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    background: rgba(8, 10, 16, 0.98);
+    border: 1px solid var(--primary-cyan);
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--primary-cyan);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hud-step:hover .hud-step-tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Generic 3D Object Placement Helper (True Virtualization & Culling) */
+.world-scene-group {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-style: preserve-3d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.world-scene-group.scene-virtualized {
+    display: none !important;
+    pointer-events: none;
+}
+
+/* Zero-Repaint Opacity Glow Animation Helper */
+@keyframes opacityGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.75; }
+}
+
+/* ==========================================
+   SCENE 1 // CYBER TERMINAL @ Z = -500px
+   ========================================== */
+.scene-1-group {
+    transform: translateZ(-500px);
+}
+
+.story-terminal-window {
+    position: relative;
+    background: rgba(8, 10, 15, 0.98);
+    border: 1px solid rgba(0, 240, 255, 0.35);
+    border-radius: 16px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+    width: 880px;
+    margin-top: -220px;
+    margin-left: -440px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    contain: layout style;
+}
+
+/* Zero-Repaint Static Glow Layer for Terminal */
+.story-terminal-window::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 16px;
+    box-shadow: 0 0 50px rgba(0, 240, 255, 0.5);
+    opacity: 0.45;
+    pointer-events: none;
+    animation: opacityGlow 3s infinite ease-in-out;
+}
+
+.story-terminal-window.dissolved {
+    opacity: 0;
+    transform: scale(3.2);
+    pointer-events: none;
+}
+
+.terminal-topbar {
+    background: rgba(18, 22, 32, 0.95);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.terminal-dot.red { background: #FF5F56; }
+.terminal-dot.yellow { background: #FFBD2E; }
+.terminal-dot.green { background: #27C93F; }
+
+.terminal-body {
+    padding: 32px 28px;
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    line-height: 2.1;
+    color: var(--text-primary);
+    min-height: 360px;
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+.terminal-line {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.terminal-line.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.terminal-prompt {
+    color: var(--primary-cyan);
+    font-weight: 700;
+    margin-right: 12px;
+}
+
+.terminal-text {
+    color: #E2E8F0;
+}
+
+.terminal-cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1.2em;
+    background: var(--primary-cyan);
+    vertical-align: middle;
+    margin-left: 4px;
+    animation: blinkCursor 0.9s infinite;
+}
+
+@keyframes blinkCursor {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+/* ==========================================
+   SCENE 2 // FLOATING CODE & KINETIC TYPOGRAPHY (@ Z = -2800px to -4400px)
+   ========================================== */
+.scene-2-group {
+    transform: translateZ(-3400px);
+}
+
+.floating-card-3d {
+    position: absolute;
+    background: rgba(14, 18, 26, 0.92);
+    border: 1px solid rgba(0, 240, 255, 0.35);
+    border-radius: var(--radius-lg);
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+    transition: transform 0.35s ease, border-color 0.35s ease;
+}
+
+/* Zero-Repaint Static Glow Layer */
+.floating-card-3d::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 35px rgba(0, 240, 255, 0.4);
+    opacity: 0.35;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.floating-card-3d:hover {
+    transform: scale(1.1) translateZ(40px);
+    border-color: var(--primary-cyan);
+}
+
+.floating-card-3d:hover::after { opacity: 0.8; }
+
+.kinetic-sentence-3d {
+    position: absolute;
+    font-family: var(--font-heading);
+    font-size: clamp(3.6rem, 8vw, 7.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    text-align: center;
+    width: 1100px;
+    margin-left: -550px;
+    margin-top: -80px;
+    opacity: 0.12;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.kinetic-sentence-3d.active-focus {
+    opacity: 1;
+}
+
+/* ==========================================
+   SCENE 3 // DIGITAL ECOSYSTEM & PACKETS (@ Z = -6200px)
+   ========================================== */
+.scene-3-group {
+    transform: translateZ(-6200px);
+}
+
+.svg-network-ring {
+    position: absolute;
+    width: 1100px;
+    height: 550px;
+    margin-left: -550px;
+    margin-top: -275px;
+    pointer-events: none;
+}
+
+.network-wire {
+    fill: none;
+    stroke: rgba(0, 240, 255, 0.22);
+    stroke-width: 2;
+    stroke-dasharray: 8 8;
+}
+
+.wire-packet {
+    fill: var(--primary-cyan);
+    filter: drop-shadow(0 0 8px var(--primary-cyan));
+}
+
+/* ==========================================
+   SCENE 4 // THREAT INTRUSION & PIPELINE FREEZE (@ Z = -8500px)
+   ========================================== */
+.scene-4-group {
+    transform: translateZ(-8500px);
+}
+
+.threat-alert-box-3d {
+    position: absolute;
+    background: rgba(255, 46, 99, 0.18);
+    border: 1px solid var(--alert-red);
+    border-radius: var(--radius-lg);
+    padding: 18px 26px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85);
+    transition: background 0.6s ease, border-color 0.6s ease;
+}
+
+.threat-alert-box-3d::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 40px rgba(255, 46, 99, 0.5);
+    opacity: 0.6;
+    pointer-events: none;
+    animation: opacityGlow 1.6s infinite ease-in-out;
+}
+
+.threat-alert-box-3d.neutralized {
+    background: rgba(0, 245, 155, 0.18);
+    border-color: var(--neon-green);
+}
+
+.threat-alert-box-3d.neutralized::after {
+    box-shadow: 0 0 40px rgba(0, 245, 155, 0.5);
+    animation: none;
+    opacity: 0.5;
+}
+
+/* ==========================================
+   SCENE 5 // BLUE ENERGY WAVE & SCORE (@ Z = -10800px)
+   ========================================== */
+.scene-5-group {
+    transform: translateZ(-10800px);
+}
+
+.blue-energy-wave {
+    position: absolute;
+    width: 2500px;
+    height: 2500px;
+    margin-left: -1250px;
+    margin-top: -1250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.8) 0%, rgba(0, 245, 155, 0.4) 30%, transparent 65%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateZ(500px) scale(0.1);
+}
+
+.blue-energy-wave.sweeping {
+    opacity: 0.88;
+    transform: translateZ(-800px) scale(2.2);
+}
+
+.security-score-3d {
+    font-family: var(--font-mono);
+    font-size: clamp(4.5rem, 11vw, 8.5rem);
+    font-weight: 900;
+    color: var(--alert-red);
+    text-align: center;
+    width: 600px;
+    margin-left: -300px;
+    margin-top: -140px;
+    transition: color 0.6s ease;
+}
+
+.security-score-3d.secured {
+    color: var(--neon-green);
+}
+
+/* ==========================================
+   SCENE 6 // ORBITING LOGO & PLATFORM ENTRY (@ Z = -13000px)
+   ========================================== */
+.scene-6-group {
+    transform: translateZ(-13000px);
+}
+
+.orbit-3d-box {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    margin-left: -180px;
+    margin-top: -180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+}
+
+.orbit-ring-3d {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px dashed rgba(0, 240, 255, 0.4);
+    pointer-events: none;
+}
+
+.orbit-ring-3d-1 {
+    width: 260px;
+    height: 260px;
+    animation: radarSweep 14s linear infinite;
+}
+
+.orbit-ring-3d-2 {
+    width: 360px;
+    height: 360px;
+    border-color: rgba(138, 43, 226, 0.4);
+    animation: radarSweep 20s linear infinite reverse;
+}
+
+.cinematic-logo-3d {
+    font-family: var(--font-heading);
+    font-size: clamp(3.5rem, 8.5vw, 6.2rem);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-cyan) 45%, var(--cyber-violet) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    transform: scale(0.75) translateZ(-180px);
+    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10;
+}
+
+.cinematic-logo-3d.assembled {
+    opacity: 1;
+    transform: scale(1) translateZ(0px);
+}
+
+.btn-enter-platform-3d {
+    position: absolute;
+    width: 320px;
+    margin-left: -160px;
+    top: 140px;
+    padding: 22px 48px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--primary-cyan), var(--primary-blue), var(--cyber-violet));
+    color: #FFF;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    box-shadow: 0 0 45px rgba(0, 240, 255, 0.7), 0 15px 40px rgba(0, 0, 0, 0.9);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-decoration: none;
+    z-index: 30;
+}
+
+.btn-enter-platform-3d:hover {
+    transform: scale(1.08) translateY(-4px);
+    box-shadow: 0 0 70px rgba(0, 240, 255, 0.95), 0 0 100px rgba(138, 43, 226, 0.8);
+}
+
+/* Overdrive Thrust into Dashboard Animation */
+.camera-overdrive-thrust {
+    animation: cameraOverdrive 0.7s cubic-bezier(0.7, 0, 0.84, 0) forwards !important;
+}
+
+@keyframes cameraOverdrive {
+    0% { transform: translateZ(-13000px) scale(1) rotateX(0deg); opacity: 1; }
+    100% { transform: translateZ(-17000px) scale(14) rotateX(-6deg); opacity: 0; }
+}
+
+@media (max-width: 1024px) {
+    .hud-tracker { right: 8px; padding: 12px 8px; gap: 10px; }
+    .hud-step-tooltip { display: none; }
+    .story-terminal-window { width: 92vw; margin-left: -46vw; }
+    #quality-mode-hud { left: 12px; top: 12px; font-size: 0.72rem; }
+    #dev-perf-overlay { width: 92vw; left: 4vw; bottom: 16px; }
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECUREOPS // AI Powered DevSecOps Management Portal</title>
+    <meta name="description" content="Next-generation AI DevSecOps Management Portal. Continuous automated vulnerability scanning, zero-trust pipeline protection, and AI-powered remediation.">
+    
+    <!-- Google Fonts: Outfit, Inter, and Fira Code for Terminal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Floating Particles & Mouse-Follow Ambient Glow Canvas -->
+    <canvas id="particle-canvas" class="background-canvas"></canvas>
+
+    <!-- 1. CINEMATIC 5-SCREEN SCROLL STORY VIEWPORT (Active on #/) -->
+    <main id="story-viewport" class="story-viewport">
+        <!-- Rendered by pages/story.js -->
+    </main>
+
+    <!-- 2. APPLICATION PLATFORM SHELL (Active on #/dashboard, #/repositories, etc.) -->
+    <div id="app-shell" class="app-shell hidden">
+        <!-- Animated Collapsible Sidebar -->
+        <aside id="sidebar" class="app-sidebar">
+            <!-- Rendered by components/sidebar.js -->
+        </aside>
+
+        <!-- Main Layout Area (Navbar + Viewport) -->
+        <div id="main-layout" class="main-layout">
+            <!-- Top Navigation Bar -->
+            <header id="navbar" class="app-navbar">
+                <!-- Rendered by components/navbar.js -->
+            </header>
+
+            <!-- Dynamic Page Content Viewport -->
+            <main id="main-viewport" class="main-viewport">
+                <!-- SPA Router renders dynamic views here -->
+            </main>
+        </div>
+    </div>
+
+    <!-- 3. GLOBAL MODALS & TOAST NOTIFICATION DRAWERS -->
+    <div id="modal-container" class="modal-container hidden">
+        <div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="modal-card glass-card" id="modal-content">
+            <!-- Dynamic Modal Content -->
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container">
+        <!-- Toast notifications float in here -->
+    </div>
+
+    <!-- Core Modular JavaScript Architecture -->
+    <script src="assets/js/mockData.js"></script>
+    <script src="assets/js/state.js"></script>
+    <script src="assets/js/particles.js"></script>
+    <script src="assets/js/charts.js"></script>
+    
+    <!-- Components -->
+    <script src="components/sidebar.js"></script>
+    <script src="components/navbar.js"></script>
+    <script src="components/modal.js"></script>
+    <script src="components/terminal.js"></script>
+    <script src="components/pipeline.js"></script>
+    <script src="components/notificationCenter.js"></script>
+
+    <!-- Pages / Screen Controllers -->
+    <script src="pages/story.js"></script>
+    <script src="pages/auth.js"></script>
+    <script src="pages/dashboard.js"></script>
+    <script src="pages/repositories.js"></script>
+    <script src="pages/scanCenter.js"></script>
+    <script src="pages/scanHistory.js"></script>
+    <script src="pages/reports.js"></script>
+    <script src="pages/vulnerabilityExplorer.js"></script>
+    <script src="pages/pipelinePage.js"></script>
+    <script src="pages/notificationsPage.js"></script>
+    <script src="pages/profile.js"></script>
+    <script src="pages/admin.js"></script>
+    <script src="pages/settings.js"></script>
+    <script src="pages/auditLogs.js"></script>
+    <script src="pages/about.js"></script>
+    <script src="pages/documentation.js"></script>
+    <script src="pages/helpCenter.js"></script>
+    <script src="pages/roadmap.js"></script>
+    <script src="pages/notFound.js"></script>
+
+    <!-- Router & Application Initialization -->
+    <script src="assets/js/router.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

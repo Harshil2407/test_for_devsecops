@@ -1,0 +1,78 @@
+/* ==========================================================================
+   SECUREOPS // Design Tokens (`assets/css/variables.css`)
+   ========================================================================== */
+
+:root {
+    /* Base Dark Theme Colors */
+    --bg-obsidian: #08090C;
+    --bg-charcoal: #0D0F17;
+    --bg-elevated: #131622;
+    --bg-card: rgba(19, 22, 34, 0.7);
+    --bg-card-hover: rgba(26, 31, 48, 0.85);
+    
+    /* Primary & Accent Palette (Black, Dark Gray, Blue, Cyan, Electric Blue) */
+    --primary-cyan: #00F0FF;
+    --primary-blue: #0066FF;
+    --electric-blue: #38BDF8;
+    --cyber-violet: #8A2BE2;
+    --neon-green: #00F59B;
+    --alert-red: #FF2E63;
+    --warning-amber: #FFB800;
+    --info-indigo: #6366F1;
+    
+    /* Text & Typography Colors */
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --text-dim: #475569;
+    --text-on-cyan: #08090C;
+
+    /* Glassmorphism Borders & Shadows */
+    --glass-bg: rgba(15, 18, 28, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-light: rgba(255, 255, 255, 0.15);
+    --card-border: rgba(255, 255, 255, 0.06);
+    --card-bg: rgba(18, 21, 33, 0.65);
+    
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.65);
+    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    
+    /* Glow Filters */
+    --shadow-glow-cyan: 0 0 20px rgba(0, 240, 255, 0.35);
+    --shadow-glow-blue: 0 0 20px rgba(0, 102, 255, 0.35);
+    --shadow-glow-red: 0 0 20px rgba(255, 46, 99, 0.35);
+    --shadow-glow-green: 0 0 20px rgba(0, 245, 155, 0.35);
+    --shadow-glow-violet: 0 0 20px rgba(138, 43, 226, 0.35);
+
+    /* Fonts */
+    --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'Fira Code', monospace;
+
+    /* Border Radii */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
+    --radius-full: 9999px;
+
+    /* Transitions & Easings */
+    --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-slow: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-cubic: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Z-Index Hierarchy */
+    --z-background: 0;
+    --z-story: 10;
+    --z-app: 20;
+    --z-navbar: 100;
+    --z-sidebar: 110;
+    --z-dropdown: 200;
+    --z-modal-backdrop: 500;
+    --z-modal: 510;
+    --z-toast: 600;
+}
