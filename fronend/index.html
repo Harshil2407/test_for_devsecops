@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure App</title>
+</head>
+<body>
+    <h1>Welcome to the Secure Application</h1>
+    <div id="greeting"></div>
+
+    <script>
+        // SECURE: Using textContent instead of innerHTML to prevent XSS (Cross-Site Scripting)
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name') || 'Guest';
+        document.getElementById('greeting').textContent = "Hello, " + name + "!";
+    </script>
+</body>
+</html>
