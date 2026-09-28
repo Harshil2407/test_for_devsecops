@@ -29,3 +29,5 @@ if __name__ == "__main__":
     
     ip = input("Enter IP to ping: ")
     ping_server(ip)
+
+#test
